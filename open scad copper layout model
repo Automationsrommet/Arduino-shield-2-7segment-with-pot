@@ -1,0 +1,128 @@
+//pinner 0 - 13 og GND på enne siden
+//A5 analog inngang på den andre
+pinneavstand=2.54;
+pinnebredde=0.8;
+pinnehoyde=11;
+pad=1.0;
+sjusegmentlengde=17.5;
+sjusegmentbredde=12.5;
+pothoyde=5;
+potradius=7.5;
+//mal for å ta ytre grense
+color("black")difference(){
+cube([55,70,1],center=true);
+cube([55-1,70-1,3],center=true);
+}
+
+
+//projection(cut = true)translate([0,0,-1.5]){
+for (a=[-1:2:1]){
+    for (b=[0:180:180]){
+translate([0,a*2,0])color("black")rotate([0,0,35])cube([66,0.5,1],center=true);
+
+rotate([0,0,b])translate([0,2,0])difference(){
+
+//Banene
+color("black")
+{
+    //Tekst, Det er viktig å se om noe er speilvendt
+    translate([-25,-28.5,1])rotate([0,0,36])text("Kretskortøving",2.85);
+    translate([-18,-30,1])rotate([0,0,36])text("EL1B",4.5);
+    translate([-17,-36,1])rotate([0,0,36])text("2021/2022",2.65);
+    
+    translate([+6,-25,1])rotate([0,0,0])text("LAGET AV:",1.6);
+    //Pinne 1 til 8
+    for (m=[0:pinneavstand:pinneavstand*6])
+    {
+    bane(25,-32+m,25-2.5,-32+m-1);
+bane(25,-32+pinneavstand*7,25-2.5,-32+pinneavstand*7-1);
+bane(25,-32+pinneavstand*8.5+m,25-2.5,-32+pinneavstand*8.5+m-2);      
+}
+for (n=[0:sjusegmentbredde+1:sjusegmentbredde+1]){
+ for (o=[pinneavstand:pinneavstand:2*pinneavstand]){
+  for (p=[-1:2:1]){
+  
+    bane(10+((sjusegmentlengde/2)-1),-26+n+o*p,10+((sjusegmentlengde/2)+1.5),-26+n+o*p+2);
+    bane(10-((sjusegmentlengde/2)-1),-26+n+o*p,10-((sjusegmentlengde/2)+1.6),-26+n+o*p-2);
+          
+              
+          }}}
+    //jording-banene
+    bane(25,-32+pinneavstand*(8+7.5),10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1);
+    bane(10+1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1);
+    //bane(10+1*((sjusegmentlengde/2)-1),-26,10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1);
+    bane(10+1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,10-1*((sjusegmentlengde/2)-1),-26);      
+          
+    bane(10+1*((sjusegmentlengde/2)-1),-26,10-1*((sjusegmentlengde/2)-1),-26);
+    
+    bane(10-((sjusegmentlengde/2)-1),-26+0+0*1,10-((sjusegmentlengde/2)+1.6),-26+0+0*1-2);      
+     bane(10-((sjusegmentlengde/2)+1.6),-26+0+0*1-2,-14+potradius+1,-28-2*pinneavstand);     
+    
+    
+    //aref-pinnen
+    bane(25,-32+pinneavstand*(8+8.5),-3,-32+pinneavstand*9.0);
+    bane(-3,-32+pinneavstand*9.0,-14+potradius+1,-28+2*pinneavstand);
+    //A5 analog inn fra potmeteret
+    bane(-25,-32,-14-potradius,-28);
+
+// Kobber-plate for å spare etse-kjemikalier og bedre jording
+          translate([10,-14,2])cube([13.1,17,1],center=true);
+translate([15,-3,2])cube([7,5,1],center=true);
+translate([17.8,-0.5,2])cube([6,5,1],center=true);
+}
+
+
+//Arduino UNO R3, grovt skissert i grønt
+translate([0,0,-5])color("green")cube([54,68,2],center=true);
+
+//Vårt shield, rosa med en skrå for å spare materiale
+translate([0,0,-1])color("pink")linear_extrude(2)polygon([[27,15],[27,-34],[-27,-34],[-27,-26]]);
+
+//potmeter
+  color("black")translate([-14,-28,6])cylinder(pothoyde,potradius,potradius,center=true);
+  translate([-14-potradius,-28,3])pinne();
+  translate([-14+potradius+1,-28+2*pinneavstand,3])pinne();
+  translate([-14+potradius+1,-28-2*pinneavstand,3])pinne();
+  
+  //7-segment-display
+  for (j=[0:sjusegmentbredde+1:sjusegmentbredde+1]){
+   for (k=[-2*pinneavstand:pinneavstand:2*pinneavstand]){
+    for (l=[-1:2:1]){
+  translate([10,-26+j,6])color("white")cube([sjusegmentlengde,sjusegmentbredde,pothoyde],center=true);
+          translate([10+l*((sjusegmentlengde/2)-1),-26+j+k,3])pinne();
+    
+        translate([10-((sjusegmentlengde/2)+1.6),-26+j+k*l-2,0])pinne();   
+        translate([10+((sjusegmentlengde/2)+1.5),-26+j+k*l+2,0])pinne(); 
+              }}}
+
+//Pinnene, starter på pinne 0
+for (i=[0:pinneavstand:pinneavstand*6])
+    {
+    translate([25,-32+i,0])color("silver")pinne();
+    translate([25,-32+7*pinneavstand,0])color("silver")pinne();
+    translate([25,-32+pinneavstand*8.5+i,0])pinne();
+    translate([25,-32+pinneavstand*8.5+7*pinneavstand,0])pinne();
+    translate([25,-32+pinneavstand*(8+8.5),0])pinne();
+    translate([-25,-32,0])pinne();  
+    //disse er bare for å lage hull til motstander
+    translate([25-2.5,-32+pinneavstand*8.5+i-2,0])pinne();
+    translate([25-2.5,-32+i-1,0])pinne();
+    translate([25-2.5,-32+7*pinneavstand-1,0])pinne();
+    translate([25-2.5,-32-1,0])pinne();
+        
+}
+}
+//}
+}}
+
+module bane(startx,starty,sluttx,slutty){
+   translate([0,0,1]) linear_extrude(1){
+        translate([startx,starty,0])circle(pad, $fn=20);
+       translate([sluttx,slutty,0])circle(pad, $fn=20);
+       polygon([[startx-pad/3,starty+pad/3],[startx+pad/3,starty-pad/3],[sluttx+pad/3,slutty-pad/3],[sluttx-pad/3,slutty+pad/3]]);
+    }
+}
+
+module pinne (){
+ color("silver")cube([pinnebredde,pinnebredde,pinnehoyde],center=true);   
+}
