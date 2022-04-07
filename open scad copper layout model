@@ -1,3 +1,8 @@
+//OpenScad code for copper layout for 2x7segment Arduino Shield with potmeter. 
+//Click "Tow view" and "orthogonal" projection, hide axis and export as image. 
+//I later used MS-Paint to save as monochrome bitmap, and 
+//MS-Word to print on plastic sheets for UV lighting of photosensitive pcb's.
+
 //pinner 0 - 13 og GND på enne siden
 //A5 analog inngang på den andre
 pinneavstand=2.54;
