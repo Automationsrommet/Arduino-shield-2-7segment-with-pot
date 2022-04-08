@@ -11,9 +11,10 @@ It does so poorly, as soldering the pot and 7segmens ends up being on the wrong 
 The two students who managed to solder 7segments top side suspended 3mm from board melted the plastic sides and the result ended up looking less than pretty.
  
  Contents:
- OpenScad code for model with 2x7segment displays
- OpenScad code for model with 2x7segment displays just leaving out one set
+ OpenScad code for model with 2x7segment displays.
+ OpenScad code for model with 2x7segment displays just leaving out one set.
  OpenScad code for copper layout for both of the above models. Click "Tow view" and "orthogonal" projection, hide axis and export as image. I later used MS-Paint to save as monochrome bitmap, and MS-Word to print on plastic sheets for UV lighting of photosensitive pcb's.
+Next years (2022-2023) code for copper layout for both of the above models. Click "Tow view" and "orthogonal" projection, hide axis and export as image. I later used MS-Paint to save as monochrome bitmap, and MS-Word to print on plastic sheets for UV lighting of photosensitive pcb's.
  Gcode that we used on Prusa Mini to etch the cards with our chemical "finetse chrystal" that works best around 50 degrees celsius, active lines should be duplicated for longer workingperiods.
  Arduino IDE code for using analog in 5 to activate different segments to make numbers. A good way to allow students to get the feel for hardware programming in my opinion.
  
