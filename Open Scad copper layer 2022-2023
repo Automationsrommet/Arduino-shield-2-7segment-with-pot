@@ -10,12 +10,17 @@ sjusegmentbredde=12.5;
 pothoyde=5;
 potradius=7.5;
 klaring=0.3;
-offset=5.2;
+offsetY=5.2;
+offsetX=0;
+detail=5;
+ramme=0.6;
+heigth=58.5;
+width=53;
 //mal for å ta ytre grense
-//color("black")difference(){
-//cube([54,66.5,1],center=true);
-//cube([54-1,66.5-1,3],center=true);
-//}
+color("black")difference(){
+cube([width+3*ramme,heigth+3*ramme,1],center=true);
+cube([width-ramme,heigth-ramme,3],center=true);
+}
 
 
 //projection(cut = true)translate([0,0,-1.5]){
@@ -26,7 +31,7 @@ for (a=[-1:2:1]){
 //translate([0,a*1.5,0])color("black")rotate([0,0,35])cube([66,1.8,1],center=true);
 //cube([54,66.5,1],center=true);  
           //  }
-rotate([0,0,b])translate([0,offset,0])difference(){
+rotate([0,0,b])translate([offsetX,offsetY,0])difference(){
 
 //Banene
 color("black")
@@ -113,8 +118,8 @@ module bane(startx,starty,sluttx,slutty){
   difference(){
      union(){
          translate([0,0,1]) linear_extrude(1){
-        translate([startx,starty,0])circle(pad, $fn=9);
-       translate([sluttx,slutty,0])circle(pad, $fn=9);
+        translate([startx,starty,0])circle(pad, $fn=detail);
+       translate([sluttx,slutty,0])circle(pad, $fn=detail);
        //polygon([[startx-pad/3,starty+pad/3],[startx+pad/3,starty-pad/3],[sluttx+pad/3,slutty-pad/3],[sluttx-pad/3,slutty+pad/3]]);
              translate([startx+(sluttx-startx)/2,starty+(slutty-starty)/2,-3])rotate([0,0,90+asin((sluttx-startx)/sqrt((sluttx-startx)*(sluttx-startx)+(slutty-starty)*(slutty-starty)))])square([sqrt((sluttx-startx)*(sluttx-startx)+(slutty-starty)*(slutty-starty)),pad],center=true);
     }
@@ -136,14 +141,14 @@ for (c=[-1:2:1]){
           //  }
 rotate([0,0,d])translate([0,0,0])difference(){        
               difference(){
-          translate([0,offset-2,+1])color("black")linear_extrude(2)polygon([[27,17],[27,-32],[-27,-32],[-27,-24]]);
+          translate([offsetX,offsetY-2,+1])color("black")linear_extrude(2)polygon([[26,17],[26,-32],[-26,-32],[-26,-24]]);
                   //Tekst, Det er viktig å se om noe er speilvendt
-   translate([0,offset-2,-1])linear_extrude(6){
+   translate([offsetX,offsetY-2,-1])linear_extrude(6){
 translate([-25,-27.0,1])rotate([0,0,37])text("Kretskortøving",2.85);
 translate([-18,-29,1])rotate([0,0,36])text("EL1B",4.4);
 translate([-14.5,-32,1])rotate([0,0,36])text("2022/2023",2.35);
 translate([+5,-25.5,1])rotate([0,0,42])text("LAGET AV:",1.6);}
-        translate([0,offset,0])  minkowski(){
+        translate([offsetX,offsetY,0])  minkowski(){
       color("black")
 {
     
@@ -180,7 +185,7 @@ bane(-3,-32+pinneavstand*9.0,-14+potradius+1,-28+2*pinneavstand);
     bane(-14-potradius,-28,-25,-32 );
         
       }
-          cylinder(3,klaring,klaring ,$fn=5,center=true);
+          cylinder(3,klaring,klaring ,$fn=detail,center=true);
                   
 }
 }
