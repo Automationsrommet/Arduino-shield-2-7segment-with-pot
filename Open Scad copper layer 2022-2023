@@ -21,7 +21,7 @@ ramme=0.6;
 heigth=58.3;
 width=53;
 //components 1 is pot, 2 and 3 are 7segmentblocks
-componentplacement=[[0,0,0],[0,0,0],[0,0,0]];
+componentplacement=[[-14,-28,45],[10,-26,0],[10,-26+sjusegmentbredde+1,0]];
 
 //  MAIN  code starts here where various modules are called
 //This is where we duplicate the circuit
@@ -40,9 +40,9 @@ color("white")roomfortraces();
 //pins();
 //arduinoUno();
 //shield();
-potmeter(componentplacement[0][0],componentplacement[0][1],componentplacement[0][2]);
-sevensegment(componentplacement[1][0],componentplacement[1][1],componentplacement[1][2]);
-sevensegment(componentplacement[2][0],componentplacement[2][1],componentplacement[2][2]);
+//potmeter(componentplacement[0][0],componentplacement[0][1],componentplacement[0][2]);
+//sevensegment(componentplacement[1][0],componentplacement[1][1],componentplacement[1][2]);
+//sevensegment(componentplacement[2][0],componentplacement[2][1],componentplacement[2][2]);
 border();
 
 //   ****            MODULES       ****
@@ -113,10 +113,10 @@ baneplass(-3,-32+pinneavstand*9.0,-14+potradius+1,-28+2*pinneavstand,0,1);
     }
 module border(){
  color("black")difference(){
-cube([width+3*ramme,heigth+3*ramme,1],center=true);
-cube([width-ramme,heigth-ramme,3],center=true);
+cube([width+3*ramme,heigth+3*ramme,2],center=true);
+cube([width-ramme,heigth-ramme,4],center=true);
 }   
-    }
+}
 module pins () {
    for (i=[0:pinneavstand:pinneavstand*6])
     {
@@ -145,22 +145,21 @@ module copperclad (){
 translate([offsetX,offsetY-2,+2])color("black")linear_extrude(2)polygon([[26,17],[26,-32],[-26,-32],[-26,-24]]);  
 }
 module sevensegment(x,y,rotation){
-     for (j=[0:sjusegmentbredde+1:sjusegmentbredde+1]){
+     //for (j=[0:sjusegmentbredde+1:sjusegmentbredde+1]){
    for (k=[-2*pinneavstand:pinneavstand:2*pinneavstand]){
     for (l=[-1:2:1]){
-  translate([10+offsetX,-26+j+offsetY,6])color("white")cube([sjusegmentlengde,sjusegmentbredde,pothoyde],center=true);
-          translate([10+l*((sjusegmentlengde/2)-1)+offsetX,-26+j+k+offsetY,3])pinne();
-    
-        translate([10-((sjusegmentlengde/2)+1.6)+offsetX,-26+j+k*l-2+offsetY,0])pinne();   
-        translate([10+((sjusegmentlengde/2)+1.5)+offsetX,-26+j+k*l-1+offsetY,0])pinne(); 
-              }}}
+  translate([x+offsetX,y+offsetY,6])color("white")cube([sjusegmentlengde,sjusegmentbredde,pothoyde],center=true);
+          translate([x+l*((sjusegmentlengde/2)-1)+offsetX,y+k+offsetY,3])pinne();
+              //}
+              }
+              }
 }
 
 module potmeter(x,y,rotation){
- color("black")translate([-14+offsetX,-28+ offsetY,6])cylinder(pothoyde,potradius,potradius,center=true);
-  translate([-14-potradius+offsetX,-28+offsetY,3])pinne();
-  translate([-14+potradius+1+offsetX,-28+2*pinneavstand+offsetY,3])pinne();
-  translate([-14+potradius+1+offsetX,-28-2*pinneavstand+offsetY,3])pinne();   
+ color("black")translate([x+offsetX,y+ offsetY,6])cylinder(pothoyde,potradius,potradius,center=true);
+  translate([x-potradius+offsetX,y+offsetY,3])pinne();
+  translate([x+potradius+1+offsetX,y+2*pinneavstand+offsetY,3])pinne();
+  translate([x+potradius+1+offsetX,y-2*pinneavstand+offsetY,3])pinne();   
 }
 
 //The two last arguments in "bane" is 1 for pad or 0 for via at start and end of trace
@@ -199,3 +198,4 @@ if (endpad==0)translate([sluttx,slutty,1])circle(pad/2+klaring);
 module pinne (){
  color("silver")cube([pinnebredde,pinnebredde,pinnehoyde],center=true);   
 }
+
