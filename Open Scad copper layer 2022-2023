@@ -20,27 +20,33 @@ detail=5;
 ramme=0.6;
 heigth=58.3;
 width=53;
+componentplaces=89;
 
-
-//  MAIN  code starts her where various modules are called
-
-//This marks the outer border
-color("black")difference(){
-cube([width+3*ramme,heigth+3*ramme,1],center=true);
-cube([width-ramme,heigth-ramme,3],center=true);
-}
-
+//  MAIN  code starts here where various modules are called
 //This is where we duplicate the circuit
 color("black")
-for (a=[-1:2:1]){
     for (b=[0:180:180]){
-       
-rotate([0,0,b])translate([offsetX,offsetY,0])difference(){
+       rotate([0,0,b]){
+        translate([offsetX,offsetY,0])
+traces();
+difference(){
+copperclad();              
+textlabel();  
+color("white")roomfortraces();                 
+}
+}
+}
+//pins();
+//arduinoUno();
+//shield();
+//potmeter(0,0,0);
+//sevensegment(0,0,0);
+border();
 
-//Traces
+//   ****            MODULES       ****
+module traces () {
 color("black")
-{
-    
+{    
     for (m=[0:pinneavstand:pinneavstand*5])
     {
     bane(25,-32+m,25-2.5,-32+m-1,1,1);
@@ -50,154 +56,112 @@ bane(25,-32+pinneavstand*8.5+m,25-2.5,-32+pinneavstand*8.5+m-2,1,1);
 }
 for (n=[0:sjusegmentbredde+1:sjusegmentbredde+1]){
  for (o=[pinneavstand:pinneavstand:2*pinneavstand]){
-  for (p=[-1:2:1]){
-  
+  for (p=[-1:2:1]){  
     bane(10+((sjusegmentlengde/2)-1),-26+n+o*p,10+((sjusegmentlengde/2)+1.5),-26+n+o*p-1,1,1);
-    bane(10-((sjusegmentlengde/2)-1),-26+n+o*p,10-((sjusegmentlengde/2)+1.6),-26+n+o*p-2,1,1);
-          
-              
-          }}}
+    bane(10-((sjusegmentlengde/2)-1),-26+n+o*p,10-((sjusegmentlengde/2)+1.6),-26+n+o*p-2,1,1);  
+          }
+          }
+          }
     //Ground-traces
     bane(25,-32+pinneavstand*(8+6.5),10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,1,1);
     bane(10+1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,1,1);
-    bane(10+1*((sjusegmentlengde/2)-1),-26,10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,1,1);
-    
-    bane(10-((sjusegmentlengde/2)-1),-26+0+0*1,10-((sjusegmentlengde/2)+1.6),-26+0+0*1-2,1,0);      
+    bane(10+1*((sjusegmentlengde/2)-1),-26,10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,1,1);    
+    bane(10-((sjusegmentlengde/2)-1),-26+0+0*1,10-((sjusegmentlengde/2)+1.6),-26+0+0*1-2,1,0);  
     bane(10-((sjusegmentlengde/2)+1.6),-26+0+0*1-2,-14+potradius+1,-28-2*pinneavstand,0,1);     
-    
-    //aref-pin
+     }
+    //aref-pin trace
 bane(25,-32+pinneavstand*(8+7.5),+3,-32+pinneavstand*11.0,1,0);
 bane(+3,-32+pinneavstand*11.0,-3,-32+pinneavstand*9.0,0,0);
 bane(-3,-32+pinneavstand*9.0,-14+potradius+1,-28+2*pinneavstand,0,1);
 //A5 analog input from the potmeter
-    bane(-14-potradius,-28,-25,-32 ,1,1);
-        
-      }
- 
-
-
-
-//Pins, starting with pin 0
-for (i=[0:pinneavstand:pinneavstand*6])
-    {
-    translate([25,-32+i,0])color("silver")pinne();
-    translate([25,-32+7*pinneavstand,0])color("silver")pinne();
-    translate([25,-32+pinneavstand*8.5+i,0])pinne();
-    translate([25,-32+pinneavstand*8.5+7*pinneavstand,0])pinne();
-    
-    translate([-25,-32,0])pinne();  
-   
-}
-}
-}
-}
-
-// Copper-pour to save chemicals in etching
-for (c=[-1:2:1]){
-    for (d=[0:180:180]){
-     
-rotate([0,0,d])translate([0,0,0])difference(){        
-              difference(){
-          translate([offsetX,offsetY-2,+1])color("black")linear_extrude(2)polygon([[26,17],[26,-32],[-26,-32],[-26,-24]]);
-//Text to label things and avoid mirroring the whole circuit
-   translate([offsetX,offsetY-2,-1])linear_extrude(6){
-translate([-25,-27.0,1])rotate([0,0,37])text("Kretskortøving",2.85);
-translate([-18,-29,1])rotate([0,0,36])text("EL1B",4.4);
-translate([-14.5,-32,1])rotate([0,0,36])text("2022/2023",2.35);
-translate([+5,-25.5,1])rotate([0,0,42])text("LAGET AV:",1.6);}
-//Minkowski heavy processor power user        
-translate([offsetX,offsetY,0])  minkowski(){
+    bane(-14-potradius,-28,-25,-32 ,1,1);      
+      
+    }
+module roomfortraces () {
+     translate([offsetX,offsetY,0])  //minkowski(){
       color("black")
-{
-    
-    //Pin 1 through 8 in copperpour
-    for (m=[0:pinneavstand:pinneavstand*5])
+{   for (m=[0:pinneavstand:pinneavstand*5])
     {
-    bane(25,-32+m,25-2.5,-32+m-1,1,1);
-bane(25,-32+pinneavstand*7,25-2.5,-32+pinneavstand*7-1,1,1);
-        bane(25,-32+pinneavstand*6,25-2.5,-32+pinneavstand*6-1,1,1);
-bane(25,-32+pinneavstand*8.5+m,25-2.5,-32+pinneavstand*8.5+m-2,1,1);      
-}
+    baneplass(25,-32+m,25-2.5,-32+m-1,1,1);
+baneplass(25,-32+pinneavstand*7,25-2.5,-32+pinneavstand*7-1,1,1);
+        baneplass(25,-32+pinneavstand*6,25-2.5,-32+pinneavstand*6-1,1,1);
+baneplass(25,-32+pinneavstand*8.5+m,25-2.5,-32+pinneavstand*8.5+m-2,1,1);      
+} 
 for (n=[0:sjusegmentbredde+1:sjusegmentbredde+1]){
  for (o=[pinneavstand:pinneavstand:2*pinneavstand]){
-  for (p=[-1:2:1]){
-  
-    bane(10+((sjusegmentlengde/2)-1),-26+n+o*p,10+((sjusegmentlengde/2)+1.5),-26+n+o*p-1,1,1);
-    bane(10-((sjusegmentlengde/2)-1),-26+n+o*p,10-((sjusegmentlengde/2)+1.6),-26+n+o*p-2,1,1);
-          
-              
+  for (p=[-1:2:1]){  
+    baneplass(10+((sjusegmentlengde/2)-1),-26+n+o*p,10+((sjusegmentlengde/2)+1.5),-26+n+o*p-1,1,1);
+    baneplass(10-((sjusegmentlengde/2)-1),-26+n+o*p,10-((sjusegmentlengde/2)+1.6),-26+n+o*p-2,1,1);  
           }}}
     //Ground-traces in copper pour
-    bane(25,-32+pinneavstand*(8+6.5),10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,0,0);
-    bane(10+1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,0,0);
-    bane(10+1*((sjusegmentlengde/2)-1),-26,10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,0,0);
+    baneplass(25,-32+pinneavstand*(8+6.5),10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,0,0);
+    baneplass(10+1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,0,0);
+    baneplass(10+1*((sjusegmentlengde/2)-1),-26,10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,0,0);
     
-    bane(10-((sjusegmentlengde/2)-1),-26+0+0*1,10-((sjusegmentlengde/2)+1.6),-26+0+0*1-2,0,0);      
-    bane(10-((sjusegmentlengde/2)+1.6),-26+0+0*1-2,-14+potradius+1,-28-2*pinneavstand,0,0);     
+    baneplass(10-((sjusegmentlengde/2)-1),-26+0+0*1,10-((sjusegmentlengde/2)+1.6),-26+0+0*1-2,0,0);      
+    baneplass(10-((sjusegmentlengde/2)+1.6),-26+0+0*1-2,-14+potradius+1,-28-2*pinneavstand,0,0);     
     
     //aref-pin in copper pour
-bane(25,-32+pinneavstand*(8+7.5),+3,-32+pinneavstand*11.0,1,0);
-bane(+3,-32+pinneavstand*11.0,-3,-32+pinneavstand*9.00,0);
-bane(-3,-32+pinneavstand*9.0,-14+potradius+1,-28+2*pinneavstand,0,1);
+baneplass(25,-32+pinneavstand*(8+7.5),+3,-32+pinneavstand*11.0,1,0);
+baneplass(+3,-32+pinneavstand*11.0,-3,-32+pinneavstand*9.00,0);
+baneplass(-3,-32+pinneavstand*9.0,-14+potradius+1,-28+2*pinneavstand,0,1);
     //A5 analog in from the potmeter in copper pour
-    bane(-14-potradius,-28,-25,-32,1,1);
-        
-      }
-          cylinder(3,klaring,klaring ,$fn=detail,center=true);
-                  
-}
-}
-}
-}
-}
-
-//Arduino UNO R3, bluntly put in green
-arduinoUno();
-
-//Our shield for visualisation
-shield();
-
-//potmeter
-  potmeter(0,0,0);
-  
-//7-segment-display
- sevensegment(0,0,0);
-              
-              //This marks the outer border
-color("black")difference(){
+    baneplass(-14-potradius,-28,-25,-32,1,1);
+    }
+    }
+module border(){
+ color("black")difference(){
 cube([width+3*ramme,heigth+3*ramme,1],center=true);
 cube([width-ramme,heigth-ramme,3],center=true);
-}
-
-
-//   ****            MODULES       ****
-module arduinoUno () {
-    translate([0,0,-5])color("green")cube([54,68,2],center=true);   
+}   
     }
-module shield (){
- translate([0,0,-1])color("pink")linear_extrude(2)polygon([[27,15],[27,-34],[-27,-34],[-27,-26]]);   
+module pins () {
+   for (i=[0:pinneavstand:pinneavstand*6])
+    {
+    translate([25+offsetX,-32+i+offsetY,0])color("silver")pinne();
+    translate([25+offsetX,-32+7*pinneavstand+offsetY,0])color("silver")pinne();
+    translate([25+offsetX,-32+pinneavstand*8.5+i+offsetY,0])pinne();
+    translate([25+offsetX,-32+pinneavstand*8.5+7*pinneavstand+offsetY,0])pinne();
+    
+    translate([-25+offsetX,-32+offsetY,0])pinne();  
+ }    
+    }
+module arduinoUno () {
+    translate([offsetX,offsetY,-5])color("green")cube([53,68,2],center=true);   
+    }
+module textlabel() {
+      translate([offsetX,offsetY-2,-1])linear_extrude(6){
+translate([-25,-27.0])rotate([0,0,37])text("Kretskortøving",2.85);
+translate([-18,-29])rotate([0,0,36])text("EL1B",4.4);
+translate([-14.5,-32])rotate([0,0,36])text("2022/2023",2.35);
+translate([+5,-25.5])rotate([0,0,42])text("LAGET AV:",1.6);}
 }
-
+module shield (){
+ translate([offsetX,offsetY,-1])color("pink")linear_extrude(2)polygon([[27,15],[27,-34],[-27,-34],[-27,-26]]);   
+}
+module copperclad (){
+translate([offsetX,offsetY-2,+2])color("black")linear_extrude(2)polygon([[26,17],[26,-32],[-26,-32],[-26,-24]]);  
+}
 module sevensegment(x,y,rotation){
      for (j=[0:sjusegmentbredde+1:sjusegmentbredde+1]){
    for (k=[-2*pinneavstand:pinneavstand:2*pinneavstand]){
     for (l=[-1:2:1]){
-  translate([10,-26+j,6])color("white")cube([sjusegmentlengde,sjusegmentbredde,pothoyde],center=true);
-          translate([10+l*((sjusegmentlengde/2)-1),-26+j+k,3])pinne();
+  translate([10+offsetX,-26+j+offsetY,6])color("white")cube([sjusegmentlengde,sjusegmentbredde,pothoyde],center=true);
+          translate([10+l*((sjusegmentlengde/2)-1)+offsetX,-26+j+k+offsetY,3])pinne();
     
-        translate([10-((sjusegmentlengde/2)+1.6),-26+j+k*l-2,0])pinne();   
-        translate([10+((sjusegmentlengde/2)+1.5),-26+j+k*l+2,0])pinne(); 
+        translate([10-((sjusegmentlengde/2)+1.6)+offsetX,-26+j+k*l-2+offsetY,0])pinne();   
+        translate([10+((sjusegmentlengde/2)+1.5)+offsetX,-26+j+k*l-1+offsetY,0])pinne(); 
               }}}
 }
 
 module potmeter(x,y,rotation){
- color("black")translate([-14,-28,6])cylinder(pothoyde,potradius,potradius,center=true);
-  translate([-14-potradius,-28,3])pinne();
-  translate([-14+potradius+1,-28+2*pinneavstand,3])pinne();
-  translate([-14+potradius+1,-28-2*pinneavstand,3])pinne();   
+ color("black")translate([-14+offsetX,-28+ offsetY,6])cylinder(pothoyde,potradius,potradius,center=true);
+  translate([-14-potradius+offsetX,-28+offsetY,3])pinne();
+  translate([-14+potradius+1+offsetX,-28+2*pinneavstand+offsetY,3])pinne();
+  translate([-14+potradius+1+offsetX,-28-2*pinneavstand+offsetY,3])pinne();   
 }
 
-//The two last arguments is 1 for pad, 0 for via at start and end of trace
+//The two last arguments in "bane" is 1 for pad or 0 for via at start and end of trace
 module bane(startx,starty,sluttx,slutty,startpad,endpad){
   difference(){
      union(){
@@ -214,8 +178,22 @@ if (startpad==1)translate([startx,starty,0])cylinder(15,hullradius,hullradius,ce
 if (endpad==1)translate([sluttx,slutty,0])cylinder(15,hullradius,hullradius,center=true );
 }
 }
-
-module pinne (){
- //color("silver")cube([pinnebredde,pinnebredde,pinnehoyde],center=true);   
+module baneplass(startx,starty,sluttx,slutty,startpad,endpad){
+  difference(){
+     union(){
+         translate([0,0,1]) linear_extrude(5){
+        if (startpad==1)translate([startx,starty,0])circle(pad+klaring, $fn=detail);
+       if (endpad==1)translate([sluttx,slutty,0])circle(pad+klaring, $fn=detail);
+       
+    translate([startx+(sluttx-startx)/2,starty+(slutty-starty)/2,-3])rotate([0,0,90+asin((sluttx-startx)/sqrt((sluttx-startx)*(sluttx-startx)+(slutty-starty)*(slutty-starty)))])square([sqrt((sluttx-startx)*(sluttx-startx)+(slutty-starty)*(slutty-starty)),pad+2*klaring],center=true);
+if (startpad==0)translate([startx,starty,1])circle(pad/2+klaring);
+if (endpad==0)translate([sluttx,slutty,1])circle(pad/2+klaring);
+    }
 }
-
+//if (startpad==1)translate([startx,starty,0])cylinder(15,hullradius,hullradius,center=true );
+//if (endpad==1)translate([sluttx,slutty,0])cylinder(15,hullradius,hullradius,center=true );
+}
+}
+module pinne (){
+ color("silver")cube([pinnebredde,pinnebredde,pinnehoyde],center=true);   
+}
