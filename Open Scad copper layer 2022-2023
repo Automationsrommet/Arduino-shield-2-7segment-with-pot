@@ -75,18 +75,18 @@ for (n=[0:sjusegmentbredde+1:sjusegmentbredde+1]){
           }
           }
     //Ground-traces
-    bane(25,-32+pinneavstand*(8+6.5),10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,1,1);
-    bane(10+1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,1,1);
-    bane(10+1*((sjusegmentlengde/2)-1),-26,10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,1,1);    
-    bane(10-((sjusegmentlengde/2)-1),-26+0+0*1,10-((sjusegmentlengde/2)+1.6),-26+0+0*1-2,1,0);  
-    bane(10-((sjusegmentlengde/2)+1.6),-26+0+0*1-2,-14+potradius+1,-28-2*pinneavstand,0,1);     
+    bane(pinplacement[1][0],pinplacement[1][1]-offsetY+pinneavstand*(8+6.5),componentplacement[1][0]-1*((sjusegmentlengde/2)-1),componentplacement[2][1],1,1);
+    bane(pinplacement[2][1]+1*((sjusegmentlengde/2)-1),componentplacement[2][1],pinplacement[1][0]-1*((sjusegmentlengde/2)-1),componentplacement[2][1],1,1);
+    bane(componentplacement[1][0]+1*((sjusegmentlengde/2)-1),componentplacement[1][1],componentplacement[1][0]-1*((sjusegmentlengde/2)-1),componentplacement[2][1],1,1);    
+    bane(componentplacement[1][0]-((sjusegmentlengde/2)-1),componentplacement[1][1]+0+0*1,componentplacement[1][0]-((sjusegmentlengde/2)+1.6),componentplacement[1][1]+0+0*1-2,1,0);  
+    bane(componentplacement[1][0]-((sjusegmentlengde/2)+1.6),componentplacement[1][1]+0+0*1-2,componentplacement[0][0]+potradius+1,componentplacement[0][1]-2*pinneavstand,0,1);     
      }
     //aref-pin trace
-bane(25,-32+pinneavstand*(8+7.5),+3,-32+pinneavstand*11.0,1,0);
+bane(pinplacement[1][0]-offsetX,pinplacement[1][1]-offsetY+pinneavstand*(8+7.5),+3,-32+pinneavstand*11.0,1,0);
 bane(+3,-32+pinneavstand*11.0,-3,-32+pinneavstand*9.0,0,0);
-bane(-3,-32+pinneavstand*9.0,-14+potradius+1,-28+2*pinneavstand,0,1);
+bane(-3,-32+pinneavstand*9.0,componentplacement[0][0]+potradius+1,componentplacement[0][1]+2*pinneavstand,0,1);
 //A5 analog input from the potmeter
-    bane(-14-potradius,-28,-25,-32 ,1,1);      
+    bane(componentplacement[0][0]-potradius,componentplacement[0][1],pinplacement[0][0],pinplacement[0][1]-offsetY ,1,1);      
       
     }
 module roomfortraces () {
