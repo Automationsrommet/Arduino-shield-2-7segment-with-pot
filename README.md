@@ -1,8 +1,8 @@
 # Arduino-shield-2-7segment-with-pot
-openscad code for hardware and layout for single sided pcb
+openscad code for hardware and layout for single sided pcb.
 
 
-So this is my first attempt at creating single-sided PCB layout using OpenScad
+So this is my first attempt at creating single-sided PCB layout using OpenScad. 
 I teach electronics at high school in northern norway and we had lots of 7segment displays in stock.
 This is the type as seen in the model with 5 pins at top and 5 pins bottom side, the middle one being common cathone and the rest segment anodes.
 
