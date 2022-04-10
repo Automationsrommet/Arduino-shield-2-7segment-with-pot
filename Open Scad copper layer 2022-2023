@@ -20,7 +20,8 @@ detail=5;
 ramme=0.6;
 heigth=58.3;
 width=53;
-componentplaces=89;
+//components 1 is pot, 2 and 3 are 7segmentblocks
+componentplacement=[[0,0,0],[0,0,0],[0,0,0]];
 
 //  MAIN  code starts here where various modules are called
 //This is where we duplicate the circuit
@@ -39,8 +40,9 @@ color("white")roomfortraces();
 //pins();
 //arduinoUno();
 //shield();
-//potmeter(0,0,0);
-//sevensegment(0,0,0);
+potmeter(componentplacement[0][0],componentplacement[0][1],componentplacement[0][2]);
+sevensegment(componentplacement[1][0],componentplacement[1][1],componentplacement[1][2]);
+sevensegment(componentplacement[2][0],componentplacement[2][1],componentplacement[2][2]);
 border();
 
 //   ****            MODULES       ****
