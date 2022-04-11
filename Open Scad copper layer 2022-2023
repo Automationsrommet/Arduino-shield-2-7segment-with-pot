@@ -1,6 +1,7 @@
 //I'm growing proud of this pcb code.
 //pins 0 - 13 and GND and AREF on one side
 //A5 analog input on the other side
+//OK note to self: Next time, start with component modules with numbered pins, then a list of trace coordinates for every trace.
 
 //Input parameters
 pinneavstand=2.54;
@@ -20,8 +21,10 @@ detail=5;
 ramme=0.6;
 heigth=58.3;
 width=53;
-//components 1 is pot, 2 and 3 are 7segmentblocks
-componentplacement=[[-14,-28,0],[10,-26,0],[10,-26+sjusegmentbredde+1,0]];
+//components lists, center x, y and rotation, then pins
+potone=[[-14,-28,0],[potradius/2+1,-2*pinneavstand],[-potradius/2 , 0],[potradius/2+1,2*pinneavstand]];
+sevensone=[[10,-26,0],[-sjusegmentlengde/2+1,-2*pinneavstand],[-sjusegmentlengde/2+1,-pinneavstand],[-sjusegmentlengde/2+1,0],[-sjusegmentlengde/2+1,+pinneavstand],[-sjusegmentlengde/2+1,+2*pinneavstand],[sjusegmentlengde/2-1,+2*pinneavstand],[sjusegmentlengde/2-1,+pinneavstand],[sjusegmentlengde/2-1,0],[sjusegmentlengde/2-1,-pinneavstand],[sjusegmentlengde/2-1,-2*pinneavstand]];
+sevenstwo=[[10,-26+sjusegmentbredde+1,0],[-sjusegmentlengde/2+1,-2*pinneavstand],[-sjusegmentlengde/2+1,-pinneavstand],[-sjusegmentlengde/2+1,0],[-sjusegmentlengde/2+1,+pinneavstand],[-sjusegmentlengde/2+1,+2*pinneavstand],[sjusegmentlengde/2-1,+2*pinneavstand],[sjusegmentlengde/2-1,+pinneavstand],[sjusegmentlengde/2-1,0],[sjusegmentlengde/2-1,-pinneavstand],[sjusegmentlengde/2-1,-2*pinneavstand] ];
 pinplacement=[[-25+offsetX,-32+offsetY],[25+offsetX,-32+offsetY],[25+offsetX,-32+offsetY+8.5*pinneavstand]];
 //  MAIN  code starts here where various modules are called
 //This is where we duplicate the circuit
@@ -33,7 +36,7 @@ traces();
 difference(){
 copperclad();              
 textlabel();  
-color("white")roomfortraces();                 
+color("white")roomfortraces();                
 }
 }
 }
@@ -41,9 +44,9 @@ color("white")roomfortraces();
 //arduinoUno();
 //shield();
 //spacers();
-//potmeter(componentplacement[0][0],componentplacement[0][1],componentplacement[0][2]);
-//sevensegment(componentplacement[1][0],componentplacement[1][1],componentplacement[1][2]);
-//sevensegment(componentplacement[2][0],componentplacement[2][1],componentplacement[2][2]);
+//potmeter(potone[0][0],potone[0][1],potone[0][2]);
+//sevensegment(sevensone[0]);
+//sevensegment(sevenstwo[0]);
 border();
 
 //   ****            MODULES       ****
@@ -66,31 +69,29 @@ bane(25,-32+pinneavstand*7,25-2.5,-32+pinneavstand*7-1,1,1);
         bane(25,-32+pinneavstand*6,25-2.5,-32+pinneavstand*6-1,1,1);
 bane(25,-32+pinneavstand*8.5+m,25-2.5,-32+pinneavstand*8.5+m-2,1,1);      
 }
-for (n=[0:sjusegmentbredde+1:sjusegmentbredde+1]){
- for (o=[pinneavstand:pinneavstand:2*pinneavstand]){
-  for (p=[-1:2:1]){  
-    bane(10+((sjusegmentlengde/2)-1),-26+n+o*p,10+((sjusegmentlengde/2)+1.5),-26+n+o*p-1,1,1);
-    bane(10-((sjusegmentlengde/2)-1),-26+n+o*p,10-((sjusegmentlengde/2)+1.6),-26+n+o*p-2,1,1);  
-          }
-          }
-          }
+//THIS IS WORK IN PROGRESS HERE
+ for (n=[1:1:len(sevensone)-1]){
+    bane(sevensone[0][0]+sevensone[n][0],sevensone[0][1]+sevensone[n][1],sevensone[0][0]+sevensone[n][0]*1.2,sevensone[0][1]+sevensone[n][1],1,1);
+     bane(sevenstwo[0][0]+sevenstwo[n][0],sevenstwo[0][1]+sevenstwo[n][1],sevenstwo[0][0]+sevenstwo[n][0]*1.2,sevenstwo[0][1]+sevenstwo[n][1],1,1);
+ }
+          
     //Ground-traces
-    bane(pinplacement[1][0],pinplacement[1][1]-offsetY+pinneavstand*(8+6.5),componentplacement[1][0]-1*((sjusegmentlengde/2)-1),componentplacement[2][1],1,1);
-    bane(pinplacement[2][1]+1*((sjusegmentlengde/2)-1),componentplacement[2][1],pinplacement[1][0]-1*((sjusegmentlengde/2)-1),componentplacement[2][1],1,1);
-    bane(componentplacement[1][0]+1*((sjusegmentlengde/2)-1),componentplacement[1][1],componentplacement[1][0]-1*((sjusegmentlengde/2)-1),componentplacement[2][1],1,1);    
-    bane(componentplacement[1][0]-((sjusegmentlengde/2)-1),componentplacement[1][1]+0+0*1,componentplacement[1][0]-((sjusegmentlengde/2)+1.6),componentplacement[1][1]+0+0*1-2,1,0);  
-    bane(componentplacement[1][0]-((sjusegmentlengde/2)+1.6),componentplacement[1][1]+0+0*1-2,componentplacement[0][0]+potradius+1,componentplacement[0][1]-2*pinneavstand,0,1);     
+    bane(pinplacement[1][0],pinplacement[1][1]-offsetY+pinneavstand*(8+6.5),sevensone[0][0]-1*((sjusegmentlengde/2)-1),sevenstwo[0][1],1,1);
+    bane(pinplacement[2][1]+1*((sjusegmentlengde/2)-1),sevenstwo[0][1],pinplacement[1][0]-1*((sjusegmentlengde/2)-1),sevenstwo[0][1],1,1);
+    bane(sevensone[0][0]+1*((sjusegmentlengde/2)-1),sevensone[0][1],sevensone[0][0]-1*((sjusegmentlengde/2)-1),sevenstwo[0][1],1,1);    
+    bane(sevensone[0][0]-((sjusegmentlengde/2)-1),sevensone[0][1]+0+0*1,sevensone[0][0]-((sjusegmentlengde/2)+1.6),sevensone[0][1]+0+0*1-2,1,0);  
+    bane(sevensone[0][0]-((sjusegmentlengde/2)+1.6),sevensone[0][1]+0+0*1-2,potone[0][0]+potradius+1,potone[0][1]-2*pinneavstand,0,1);    
      }
     //aref-pin trace
 bane(pinplacement[1][0]-offsetX,pinplacement[1][1]-offsetY+pinneavstand*(8+7.5),+3,-32+pinneavstand*11.0,1,0);
 bane(+3,-32+pinneavstand*11.0,-3,-32+pinneavstand*9.0,0,0);
-bane(-3,-32+pinneavstand*9.0,componentplacement[0][0]+potradius+1,componentplacement[0][1]+2*pinneavstand,0,1);
+bane(-3,-32+pinneavstand*9.0,potone[0][0]+potradius+1,potone[0][1]+2*pinneavstand,0,1);
 //A5 analog input from the potmeter
-    bane(componentplacement[0][0]-potradius,componentplacement[0][1],pinplacement[0][0],pinplacement[0][1]-offsetY ,1,1);      
-      
+    bane(potone[0][0]-potradius,potone[0][1],pinplacement[0][0],pinplacement[0][1]-offsetY ,1,1);      
+     
     }
 module roomfortraces () {
-     translate([offsetX,offsetY,0])  //minkowski(){
+     translate([offsetX,offsetY,0])
       color("black")
 {   for (m=[0:pinneavstand:pinneavstand*5])
     {
@@ -98,34 +99,34 @@ module roomfortraces () {
 baneplass(25,-32+pinneavstand*7,25-2.5,-32+pinneavstand*7-1,1,1);
         baneplass(25,-32+pinneavstand*6,25-2.5,-32+pinneavstand*6-1,1,1);
 baneplass(25,-32+pinneavstand*8.5+m,25-2.5,-32+pinneavstand*8.5+m-2,1,1);      
-} 
+}
 for (n=[0:sjusegmentbredde+1:sjusegmentbredde+1]){
  for (o=[pinneavstand:pinneavstand:2*pinneavstand]){
   for (p=[-1:2:1]){  
     baneplass(10+((sjusegmentlengde/2)-1),-26+n+o*p,10+((sjusegmentlengde/2)+1.5),-26+n+o*p-1,1,1);
     baneplass(10-((sjusegmentlengde/2)-1),-26+n+o*p,10-((sjusegmentlengde/2)+1.6),-26+n+o*p-2,1,1);  
-          }}}
-    //Ground-traces in copper pour
-    baneplass(25,-32+pinneavstand*(8+6.5),10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,0,0);
-    baneplass(10+1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,0,0);
-    baneplass(10+1*((sjusegmentlengde/2)-1),-26,10-1*((sjusegmentlengde/2)-1),-26+sjusegmentbredde+1,0,0);
-    
-    baneplass(10-((sjusegmentlengde/2)-1),-26+0+0*1,10-((sjusegmentlengde/2)+1.6),-26+0+0*1-2,0,0);      
-    baneplass(10-((sjusegmentlengde/2)+1.6),-26+0+0*1-2,-14+potradius+1,-28-2*pinneavstand,0,0);     
-    
-    //aref-pin in copper pour
-baneplass(25,-32+pinneavstand*(8+7.5),+3,-32+pinneavstand*11.0,1,0);
-baneplass(+3,-32+pinneavstand*11.0,-3,-32+pinneavstand*9.00,0);
-baneplass(-3,-32+pinneavstand*9.0,-14+potradius+1,-28+2*pinneavstand,0,1);
-    //A5 analog in from the potmeter in copper pour
-    baneplass(-14-potradius,-28,-25,-32,1,1);
-    }
+          }
+          }
+          }
+    //Ground-traces in copper clad
+    baneplass(pinplacement[1][0],pinplacement[1][1]-offsetY+pinneavstand*(8+6.5),sevensone[0][0]-1*((sjusegmentlengde/2)-1),sevenstwo[0][1],1,1);
+    baneplass(pinplacement[2][1]+1*((sjusegmentlengde/2)-1),sevenstwo[0][1],pinplacement[1][0]-1*((sjusegmentlengde/2)-1),sevenstwo[0][1],1,1);
+    baneplass(sevensone[0][0]+1*((sjusegmentlengde/2)-1),sevensone[0][1],sevensone[0][0]-1*((sjusegmentlengde/2)-1),sevenstwo[0][1],1,1);    
+    baneplass(sevensone[0][0]-((sjusegmentlengde/2)-1),sevensone[0][1]+0+0*1,sevensone[0][0]-((sjusegmentlengde/2)+1.6),sevensone[0][1]+0+0*1-2,1,0);  
+    baneplass(sevensone[0][0]-((sjusegmentlengde/2)+1.6),sevensone[0][1]+0+0*1-2,potone[0][0]+potradius+1,potone[0][1]-2*pinneavstand,0,1);    
+     }
+    //aref-pin trace in copper clad
+baneplass(pinplacement[1][0]-offsetX,pinplacement[1][1]+pinneavstand*(8+7.5),+3,-32+pinneavstand*11.0+offsetY,1,0);
+baneplass(+3,-32+pinneavstand*11.0+offsetY,-3,-32+pinneavstand*9.0+offsetY,0,0);
+baneplass(-3,-32+pinneavstand*9.0+offsetY,potone[0][0]+potradius+1,potone[0][1]+2*pinneavstand+offsetY,0,1);
+//A5 analog input from the potmeter in copper clad
+    baneplass(potone[0][0]-potradius,potone[0][1]+offsetY,pinplacement[0][0],pinplacement[0][1] ,1,1);
     }
 module border(){
  translate([0,0,2])color("black")difference(){
 cube([width+3*ramme,heigth+3*ramme,2],center=true);
 cube([width-ramme,heigth-ramme,4],center=true);
-}   
+}  
 }
 module pins () {
    for (i=[0:pinneavstand:pinneavstand*7])
@@ -136,7 +137,7 @@ module pins () {
  }    
  }
 module arduinoUno () {
-    translate([offsetX,offsetY,-5])color("green")cube([53,68,2],center=true);   
+    translate([offsetX,offsetY,-5])color("green")cube([53,68,2],center=true);  
     }
 module textlabel() {
       translate([offsetX,offsetY-2,-1])linear_extrude(6){
@@ -146,7 +147,7 @@ translate([-14.5,-32])rotate([0,0,36])text("2022/2023",2.35);
 translate([+5,-25.5])rotate([0,0,42])text("LAGET AV:",1.6);}
 }
 module shield (){
- translate([offsetX,offsetY,1])color("pink")linear_extrude(2)polygon([[27,15],[27,-34],[-27,-34],[-27,-26]]);   
+ translate([offsetX,offsetY,1])color("pink")linear_extrude(2)polygon([[27,15],[27,-34],[-27,-34],[-27,-26]]);  
 }
 module copperclad (){
 translate([offsetX,offsetY-2,2])color("black")linear_extrude(1)polygon([[26,17],[26,-32],[-26,-32],[-26,-24]]);  
@@ -167,7 +168,7 @@ module potmeter(x,y,rotation){
  color("black")translate([0,0,6])cylinder(pothoyde,potradius,potradius,center=true);
   translate([-potradius,0,3])pinne();
   translate([potradius+1,2*pinneavstand,3])pinne();
-  translate([potradius+1,-2*pinneavstand,3])pinne();   
+  translate([potradius+1,-2*pinneavstand,3])pinne();  
 }}
 
 //The two last arguments in "bane" is 1 for pad or 0 for via at start and end of trace
@@ -202,5 +203,5 @@ if (endpad==0)translate([sluttx,slutty,1])circle(pad/2+klaring);
 }
 }
 module pinne (){
- color("silver")cube([pinnebredde,pinnebredde,pinnehoyde],center=true);   
+ color("silver")cube([pinnebredde,pinnebredde,pinnehoyde],center=true);  
 }
