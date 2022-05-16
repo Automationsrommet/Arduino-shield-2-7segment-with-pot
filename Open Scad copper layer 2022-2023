@@ -158,7 +158,7 @@ module shield (){
  translate([offsetX,offsetY,1])color("pink")linear_extrude(2)polygon([[27,15],[27,-34],[-27,-34],[-27,-26]]);  
 }
 module copperclad (){
-translate([0,0-2,2])color("black")linear_extrude(1)polygon([[26,17+5.3],[26,-32+5.3],[-26,-32+5.3],[-26,-24+5.3]]);  
+translate([0,0-2,2])color("black")linear_extrude(1)polygon([[26,17+0.4],[26,-32+5.3],[-26,-32+5.3],[-26,-24+10.4]]);  
 }
 module sevensegment(x,y,rotation){
 translate([x,y,0])rotate([0,0,rotation]){
