@@ -1,0 +1,219 @@
+//I'm growing proud of this pcb code.
+//pins 0 - 13 and GND and AREF on one side
+//A5 analog input on the other side
+//OK note to self: Next time, start with component modules with numbered pins, then a list of trace coordinates for every trace.
+
+//Input parameters
+pinneavstand=2.54;
+pinnebredde=0.8;
+pinnelengde=0.8;
+pinnehoyde=11;
+pad=1.0;
+hullradius=0.4;
+sjusegmentlengde=17.5;
+sjusegmentbredde=12.5;
+pothoyde=5;
+potradius=7.5;
+klaring=0.3;
+offsetY=5.3;
+offsetX=0;
+detail=5;
+ramme=0.6;
+heigth=58.3;
+width=53;
+pcbwidth=75;
+//components lists, center x, y and rotation, then pins
+potone=[[-14,-28,0],[potradius+1,-2*pinneavstand],[-potradius, 0],[potradius+1,2*pinneavstand]];
+sevensone=[[10,-27,0],[-sjusegmentlengde/2+1,-2*pinneavstand],[-sjusegmentlengde/2+1,-pinneavstand],[-sjusegmentlengde/2+1,+pinneavstand],[-sjusegmentlengde/2+1,+2*pinneavstand],[sjusegmentlengde/2-1,+2*pinneavstand],[sjusegmentlengde/2-1,+pinneavstand],[sjusegmentlengde/2-1,-pinneavstand],[sjusegmentlengde/2-1,-2*pinneavstand]];
+sevenstwo=[[10,-27+sjusegmentbredde,0],[-sjusegmentlengde/2+1,-2*pinneavstand],[-sjusegmentlengde/2+1,-pinneavstand],[-sjusegmentlengde/2+1,+pinneavstand],[-sjusegmentlengde/2+1,+2*pinneavstand],[sjusegmentlengde/2-1,+2*pinneavstand],[sjusegmentlengde/2-1,+pinneavstand],[sjusegmentlengde/2-1,-pinneavstand],[sjusegmentlengde/2-1,-2*pinneavstand] ];
+pinplacement=[[-25,-32],[25,-32],[25,-32+8.5*pinneavstand]];
+groundtr=[[pinplacement[1][0],pinplacement[1][1]+pinneavstand*(8.5+4)],
+[5,-12],
+[5,-18],
+[sevensone[0][0]-((sjusegmentlengde/2)-1),sevenstwo[0][1]-offsetY,sevensone[0][0]-((sjusegmentlengde/2))-offsetY],
+[sevensone[0][0]+((sjusegmentlengde/2)-1),sevenstwo[0][1]-offsetY,sevensone[0][0]-((sjusegmentlengde/2))-offsetY],
+[15,-21],
+[15,-31],
+[sevensone[0][0]+((sjusegmentlengde/2)-1),sevensone[0][1]-offsetY,sevensone[0][0]-((sjusegmentlengde/2))-offsetY],
+[sevensone[0][0]-((sjusegmentlengde/2)-1),sevensone[0][1]-offsetY,sevensone[0][0]-((sjusegmentlengde/2)+1.6)-offsetY],
+[sevensone[0][0]-((sjusegmentlengde/2)+1.6),sevensone[0][1]-offsetY],
+[potone[0][0]+potradius+1,potone[0][1]-2*pinneavstand-offsetY]];
+areftr=[[pinplacement[1][0],pinplacement[1][1]+pinneavstand*(8.5+7)],
+[-1.8,-32+pinneavstand*9.3],
+[-3,-32+pinneavstand*9-offsetY],
+[potone[0][0]+potone[3][0],potone[0][1]+potone[3][1]]];
+ain5tr=[[potone[0][0]+potone[2][0],potone[0][1]],[pinplacement[0][0],pinplacement[0][1]]];
+tracepads=[[1],[1],[0,0],[0,0],[0,1],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,1],];
+//  MAIN  code starts here where various modules are called
+//This is where we duplicate the circuit
+color("black")
+for (o=[-1:2:1]){
+    for (b=[0:180:180]){
+       
+        translate([-(pcbwidth-width)/2*o,-6.5*o,0])
+        rotate([0,0,90+o*90]){
+        translate([0,offsetY,0])
+traces();
+difference(){
+copperclad();              
+textlabel();  
+color("white")roomfortraces();                
+}
+}
+}}
+//pins();
+//arduinoUno();
+//shield();
+//spacers();
+//potmeter(potone[0][0],potone[0][1],potone[0][2]);
+//sevensegment(sevensone[0]);
+//sevensegment(sevenstwo[0]);
+border();
+
+//   ****            MODULES       ****
+module spacers(){
+    difference(){
+    union(){
+    translate([pinplacement[0][0],pinplacement[0][1],-0.5])cube(3,center=true);
+    translate([pinplacement[2][0],pinplacement[2][1]-2,-0.5])cube([3,pinneavstand*17,3],center=true);
+}
+pins();
+}
+}
+module traces () {
+color("black")
+{    
+    for (m=[0:pinneavstand:pinneavstand*5])
+    {
+bane(pinplacement[1][0],pinplacement[1][1]+m,pinplacement[1][0]-3,pinplacement[1][1]+m,1,1);
+bane(pinplacement[2][0],pinplacement[2][1]+m,pinplacement[2][0]-3,pinplacement[2][1]+m-1.8,1,1);
+bane(pinplacement[1][0],pinplacement[1][1]+pinneavstand*7,pinplacement[1][0]-3,pinplacement[1][1]+pinneavstand*7,1,1);
+bane(pinplacement[1][0],pinplacement[1][1]+pinneavstand*6,pinplacement[1][0]-3,pinplacement[1][1]+pinneavstand*6,1,1);     
+}
+ for (n=[1:1:len(sevensone)-1]){
+    bane(sevensone[0][0]+sevensone[n][0],sevensone[0][1]+sevensone[n][1],sevensone[0][0]+sevensone[n][0]*1.25,sevensone[0][1]+sevensone[n][1],1,1);
+     bane(sevenstwo[0][0]+sevenstwo[n][0],sevenstwo[0][1]+sevenstwo[n][1],sevenstwo[0][0]+sevenstwo[n][0]*1.25,sevenstwo[0][1]+sevenstwo[n][1],1,1);
+ }
+          
+    //Ground-traces
+for (o=[1:1:len(groundtr)-1]){
+    bane(groundtr[o-1][0],groundtr[o-1][1]+offsetY,groundtr[o][0],groundtr[o][1]+offsetY,1,1);
+}     
+     }
+    //aref-pin trace
+for (l=[1:1:len(areftr)-1]){
+    bane(areftr[l-1][0],areftr[l-1][1],areftr[l][0],areftr[l][1],1,1);
+}
+//A5 analog input from the potmeter
+    bane(ain5tr[0][0],ain5tr[0][1],ain5tr[1][0],ain5tr[1][1],1,1);      
+     
+    }
+module roomfortraces () {
+     translate([offsetX,offsetY,0])
+      color("black")
+{   for (m=[0:pinneavstand:pinneavstand*5])
+    {
+baneplass(pinplacement[1][0],pinplacement[1][1]+m,pinplacement[1][0]-3,pinplacement[1][1]+m,1,1);
+baneplass(pinplacement[2][0],pinplacement[2][1]+m,pinplacement[2][0]-3,pinplacement[2][1]+m-1.8,1,1);
+baneplass(pinplacement[1][0],pinplacement[1][1]+pinneavstand*7,pinplacement[1][0]-3,pinplacement[1][1]+pinneavstand*7,1,1);
+baneplass(pinplacement[1][0],pinplacement[1][1]+pinneavstand*6,pinplacement[1][0]-3,pinplacement[1][1]+pinneavstand*6,1,1);     
+}
+for (n=[1:1:len(sevensone)-1]){
+    baneplass(sevensone[0][0]+sevensone[n][0],sevensone[0][1]+sevensone[n][1],sevensone[0][0]+sevensone[n][0]*1.25,sevensone[0][1]+sevensone[n][1],1,1);
+     baneplass(sevenstwo[0][0]+sevenstwo[n][0],sevenstwo[0][1]+sevenstwo[n][1],sevenstwo[0][0]+sevenstwo[n][0]*1.25,sevenstwo[0][1]+sevenstwo[n][1],1,1);
+ }
+    //Ground-traces in copper clad
+    for (o=[1:1:len(groundtr)-1]){
+    baneplass(groundtr[o-1][0],groundtr[o-1][1]+offsetY,groundtr[o][0],groundtr[o][1]+offsetY,0,0);
+}   
+     }
+    //aref-pin trace in copper clad
+for (l=[1:1:len(areftr)-1]){
+    baneplass(areftr[l-1][0],areftr[l-1][1]+offsetY,areftr[l][0],areftr[l][1]+offsetY,1,1);
+}
+//A5 analog input from the potmeter in copper clad
+    baneplass(ain5tr[0][0],ain5tr[0][1]+offsetY,ain5tr[1][0],ain5tr[1][1]+offsetY,1,1);
+    }
+module border(){
+ translate([0,0,2])color("black")difference(){
+cube([pcbwidth+3*ramme,heigth-13+3*ramme,2],center=true);
+cube([pcbwidth-ramme,heigth-ramme-13,4],center=true);
+}  
+}
+module pins () {
+   for (i=[0:pinneavstand:pinneavstand*7])
+    {
+    translate([pinplacement[1][0],pinplacement[1][1]+i,0])pinne();
+    translate([pinplacement[2][0],pinplacement[2][1]+i,0])pinne();
+    translate([pinplacement[0][0],pinplacement[0][1],0])pinne();  
+ }    
+ }
+module arduinoUno () {
+    translate([offsetX,offsetY,-5])color("green")cube([53,68,2],center=true);  
+    }
+module textlabel() {
+      translate([offsetX,offsetY-2,-1])linear_extrude(6){
+translate([-04.9,-11.6])rotate([0,0,37])mirror([1,0,0])text("Kretskortøving",2.85);
+translate([-06,-19])rotate([0,0,36])mirror([1,0,0])text("EL1B",4.4);
+translate([-1,-22])rotate([0,0,36])mirror([1,0,0])text("2022/2023",2.35);
+translate([+14,-15.5])rotate([0,0,0])mirror([1,0,0])text("LAGET AV:",1.6);}
+}
+module shield (){
+ translate([offsetX,offsetY,1])color("pink")linear_extrude(2)polygon([[27,15],[27,-34],[-27,-34],[-27,-26]]);  
+}
+module copperclad (){
+translate([0,0-2,2])color("black")linear_extrude(1)polygon([[4.2,4.5],[4.2,17.7],[26,17.7],[26,-32+5.3],[-26,-32+5.3],[-26,-24+10.4]]);  
+}
+module sevensegment(x,y,rotation){
+translate([x,y,0])rotate([0,0,rotation]){
+   for (k=[1:1:len(sevensone)-1]){
+    
+  translate([0,0,6])color("white")cube([sjusegmentlengde,sjusegmentbredde,pothoyde],center=true);
+          translate([sevensone[k],3])pinne();
+              
+}
+}
+}
+
+module potmeter(x,y,rotation){
+    translate([x,y,0])rotate([0,0,rotation]){
+ color("black")translate([0,0,6])cylinder(pothoyde,potradius,potradius,center=true);
+  translate([-potradius,0,3])pinne();
+  translate([potradius+1,2*pinneavstand,3])pinne();
+  translate([potradius+1,-2*pinneavstand,3])pinne();  
+}}
+
+//The two last arguments in "bane" is 1 for pad or 0 for via at start and end of trace
+module bane(startx,starty,sluttx,slutty,startpad,endpad){
+  difference(){
+     union(){
+         translate([0,0,1]) linear_extrude(1){
+        if (startpad==1)translate([startx,starty,0])circle(pad, $fn=detail);
+       if (endpad==1)translate([sluttx,slutty,0])circle(pad, $fn=detail);
+       
+    translate([startx+(sluttx-startx)/2,starty+(slutty-starty)/2,-3])rotate([0,0,90+asin((sluttx-startx)/sqrt((sluttx-startx)*(sluttx-startx)+(slutty-starty)*(slutty-starty)))])square([sqrt((sluttx-startx)*(sluttx-startx)+(slutty-starty)*(slutty-starty)),pad],center=true);
+if (startpad==0)translate([startx,starty,1])circle(pad/2);
+if (endpad==0)translate([sluttx,slutty,1])circle(pad/2);
+    }
+}
+if (startpad==1)translate([startx,starty,0])cylinder(15,hullradius,hullradius,center=true );
+if (endpad==1)translate([sluttx,slutty,0])cylinder(15,hullradius,hullradius,center=true );
+}
+}
+module baneplass(startx,starty,sluttx,slutty,startpad,endpad){
+  difference(){
+     union(){
+         translate([0,0,1]) linear_extrude(5){
+        if (startpad==1)translate([startx,starty,0])circle(pad+klaring, $fn=detail);
+       if (endpad==1)translate([sluttx,slutty,0])circle(pad+klaring, $fn=detail);
+       
+    translate([startx+(sluttx-startx)/2,starty+(slutty-starty)/2,-3])rotate([0,0,90+asin((sluttx-startx)/sqrt((sluttx-startx)*(sluttx-startx)+(slutty-starty)*(slutty-starty)))])square([sqrt((sluttx-startx)*(sluttx-startx)+(slutty-starty)*(slutty-starty)),pad+2*klaring],center=true);
+if (startpad==0)translate([startx,starty,1])circle(pad/2+klaring);
+if (endpad==0)translate([sluttx,slutty,1])circle(pad/2+klaring);
+    }
+}
+}
+}
+module pinne (){
+ color("silver")cube([pinnebredde,pinnebredde,pinnehoyde],center=true);  
+}
