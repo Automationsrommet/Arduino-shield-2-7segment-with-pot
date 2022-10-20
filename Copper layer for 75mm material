@@ -50,7 +50,7 @@ color("black")
 for (o=[-1:2:1]){
     for (b=[0:180:180]){
        
-        translate([-(pcbwidth-width)/2*o,-6.5*o,0])
+        translate([-(pcbwidth-width)/2*o,-8*o,0])
         rotate([0,0,90+o*90]){
         translate([0,offsetY,0])
 traces();
@@ -162,7 +162,7 @@ module shield (){
  translate([offsetX,offsetY,1])color("pink")linear_extrude(2)polygon([[27,15],[27,-34],[-27,-34],[-27,-26]]);  
 }
 module copperclad (){
-translate([0,0-2,2])color("black")linear_extrude(1)polygon([[4.2,4.5],[4.2,17.7],[26,17.7],[26,-32+5.3],[-26,-32+5.3],[-26,-24+10.4]]);  
+translate([0,0-2,2])color("black")linear_extrude(1)polygon([[4.2,4.5],[4.2,16.1],[26,16.1],[26,-32+3.8],[-26,-32+3.8],[-26,-24+7.4]]);  
 }
 module sevensegment(x,y,rotation){
 translate([x,y,0])rotate([0,0,rotation]){
