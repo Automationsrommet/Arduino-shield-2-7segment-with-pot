@@ -1,0 +1,134 @@
+//pinner 0 - 13 og GND på enne siden
+//A5 analog inngang på den andre
+pinneavstand=2.54;
+pinnebredde=0.9;
+pinnehoyde=11;
+pad=1.1;
+hullradius=0.4;
+sjusegmentlengde=17.5;
+sjusegmentbredde=12.5;
+pothoyde=5;
+potradius=7.5;
+
+$fn=20;
+
+7seg(sjusegmentlengde,sjusegmentbredde);
+
+module 7seg(x,b){
+  //7-segment-display
+  
+    difference(){
+     translate([0,0,-0.5])color("white")cube([x,b,pothoyde+1],center=true);
+   for (k=[-2*pinneavstand:pinneavstand:2*pinneavstand]){
+    for (l=[-1:2:1]){
+        
+ 
+          translate([l*((x/2)-1),k,-5])pinne();    
+              }}
+              translate([0,0,-0.75])tall(x,b);
+              LED(x,b);
+              
+              
+         translate([0,0,-2.5])color("red")cube([x*0.9,b*0.9,3.5],center=true);
+              }
+              difference(){
+              translate([0,15,+2])color("red")cube([x*0.87,b*0.87,1],center=true);
+                  for (m=[-2*pinneavstand:pinneavstand:2*pinneavstand]){
+    for (n=[-1:2:1]){
+        
+ 
+          translate([0,15,+2.5])translate([n*((x/2)-1),m,-5])pinne();    
+              }}
+                  } 
+              }        
+              
+module tall (h,l){
+    for (i=[-1:1:1]){
+        translate([i*h*0.35,0,2])cube([l/12,h/3,2],center=true);
+    }
+    for (j=[-1:2:1]){
+        for (k=[-1:2:1]){
+        translate([j*h*0.18,k*l*0.3,2])cube([l/2.5,h/12,2],center=true);
+    }
+}
+translate([-h*0.4,-l*0.4,2])cube([l/12,h/12,2],center=true);
+}
+
+
+module LED (h,l){
+    for (i=[-1:1:1]){
+        translate([i*h*0.35,0,-1])cylinder(4,1.6,1.6,center=true);
+        translate([i*h*0.35,0,0.8])sphere(1.5);
+    }
+    for (j=[-1:2:1]){
+        for (k=[-1:2:1]){
+        translate([j*h*0.18,k*l*0.3,-1])cylinder(4,1.6,1.6,center=true);
+            translate([j*h*0.18,k*l*0.3,0.8])sphere(1.5);
+    }
+}
+//translate([-h*0.37,-l*0.31,-1])cylinder(4,1.6,1.6,center=true);
+//translate([-h*0.37,-l*0.31,0.8])sphere(1.5);
+}
+
+
+module bane(startx,starty,sluttx,slutty){
+  difference(){
+     union(){
+         translate([0,0,1]) linear_extrude(1){
+        translate([startx,starty,0])circle(pad, $fn=9);
+       translate([sluttx,slutty,0])circle(pad, $fn=9);
+       //polygon([[startx-pad/3,starty+pad/3],[startx+pad/3,starty-pad/3],[sluttx+pad/3,slutty-pad/3],[sluttx-pad/3,slutty+pad/3]]);
+             translate([startx+(sluttx-startx)/2,starty+(slutty-starty)/2,-3])rotate([0,0,90+asin((sluttx-startx)/sqrt((sluttx-startx)*(sluttx-startx)+(slutty-starty)*(slutty-starty)))])square([sqrt((sluttx-startx)*(sluttx-startx)+(slutty-starty)*(slutty-starty)),pad],center=true);
+    }
+}
+translate([startx,starty,0])cylinder(15,hullradius,hullradius,center=true );
+       translate([sluttx,slutty,0])cylinder(15,hullradius,hullradius,center=true );
+}
+}
+
+module pinne (){
+ color("silver")cube([pinnebredde,pinnebredde,pinnehoyde],center=true);   
+}
+module motstandVertikal(startx,starty,sluttx,slutty){
+    
+    translate([startx,starty,-4]){
+    color("beige")cylinder(4,1,1,center=true);
+    translate([0,0,1.5])color("orange")cylinder(0.3,1.1,1.1,center=true);
+    translate([0,0,0.5])color("black")cylinder(0.3,1.1,1.1,center=true);
+    translate([0,0,-0.5])color("chocolate")cylinder(0.3,1.1,1.1,center=true);
+    translate([0,0,-1.5])color("silver")cylinder(0.3,1.1,1.1,center=true);
+    translate([0,0,2])color("beige")sphere(1);
+    translate([0,0,-2])color("beige")sphere(1);
+    }
+    //Motstandsbein uten klump
+    translate([sluttx,slutty,-2]){        translate([0,0,0])color("silver")cylinder(10,0.3,0.3,center=true);    }
+    //Motstandsbein med klump
+    translate([startx,starty,-2]){        translate([0,0,0])color("silver")cylinder(10,0.3,0.3,center=true);    }
+    //Motstandsbein liggende del
+    translate([startx+(sluttx-startx)/2,starty+(slutty-starty)/2,-7]){rotate([0,90,90+asin((sluttx-startx)/sqrt((sluttx-startx)*(sluttx-startx)+(slutty-starty)*(slutty-starty)))])color("silver")cylinder(sqrt((sluttx-startx)*(sluttx-startx)+(slutty-starty)*(slutty-starty)),0.3,0.3,center=true);        }
+    }
+    
+    module motstandHorisontal(startx,starty,sluttx,slutty){
+    
+    translate([startx+(sluttx-startx)/2,starty+(slutty-starty)/2,-3])rotate([0,90,90+asin((sluttx-startx)/sqrt((sluttx-startx)*(sluttx-startx)+(slutty-starty)*(slutty-starty)))]){
+    color("beige")cylinder(4,1,1,center=true);
+    translate([0,0,1.5])color("orange")cylinder(0.3,1.1,1.1,center=true);
+    translate([0,0,0.5])color("black")cylinder(0.3,1.1,1.1,center=true);
+    translate([0,0,-0.5])color("chocolate")cylinder(0.3,1.1,1.1,center=true);
+    translate([0,0,-1.5])color("silver")cylinder(0.3,1.1,1.1,center=true);
+    translate([0,0,2])color("beige")sphere(1);
+    translate([0,0,-2])color("beige")sphere(1);
+    }
+    //vertikale motstandsbein
+    translate([sluttx,slutty,0]){
+        translate([0,0,0])color("silver")cylinder(6,0.3,0.3,center=true);
+    }
+        translate([startx,starty,+0]){
+        translate([0,0,0])color("silver")cylinder(6,0.3,0.3,center=true);
+    }
+    translate([startx+(sluttx-startx)/2,starty+(slutty-starty)/2,-3]){
+    rotate([0,90,90+
+        asin((sluttx-startx)/sqrt((sluttx-startx)*(sluttx-startx)+(slutty-starty)*(slutty-starty)))
+        ])color("silver")cylinder(sqrt((sluttx-startx)*(sluttx-startx)+(slutty-starty)*(slutty-starty)),0.3,0.3,center=true);
+        }
+    }
