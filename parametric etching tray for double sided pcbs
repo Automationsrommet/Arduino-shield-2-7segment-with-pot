@@ -1,0 +1,17 @@
+//parametric etching tray for double sided pcbs
+
+length=70;//add some margin so that the board moves
+width=60;//add some margin so that the board moves
+grid=5;
+$fn=5;
+
+for (i=[-length/2:length/(grid+1):length/2]){
+for (j=[-width/2:width/(grid+1):width/2]){    
+translate([i,j,1])cylinder(3,2,0,center=false);
+    translate([-length/2,j,1])cylinder(6,2,0,center=false);
+    translate([i,-width/2,1])cylinder(6,2,0,center=false);
+     translate([length/2,j,1])cylinder(6,2,0,center=false);
+    translate([i,width/2,1])cylinder(6,2,0,center=false);
+  translate([i,0,1])cube([2,width,1],center=true);
+  translate([0,j,1])cube([length,2,1],center=true);    
+}}
