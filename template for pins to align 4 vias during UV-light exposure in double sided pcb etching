@@ -1,0 +1,13 @@
+//template for pins to align 4 vias during UV-light exposure in double sided pcb etching
+//Via coordinates is copied from the Kicad project
+length=70;
+width=60;
+grid=5;
+$fn=6;
+
+difference(){
+translate([150,98,0])cube([length,width,3],center=true);
+translate([179.578,73.66,0])cylinder(50,0.7,0.7,center=true);
+translate([179.832,122.174,0])cylinder(50,0.7,0.7,center=true);
+translate([127.508,109.474,0])cylinder(50,0.7,0.7,center=true);
+translate([124.968,89.916,0])cylinder(50,0.7,0.7,center=true);}
