@@ -1,97 +1,112 @@
-//THIS IS NOT FINISHED YET
-//Arduino + Seriellkabel
+
 avstand=26;
 hoyde=16;
-vinkel =45;
+vinkel=45;
 snitt=27;
-//og boksene kan pusles sammen
-//Todo:
-//Større margin til arm
-//Arm til siden.
-//Plass til loddinger i spor
-//mere polstring
-//større takhøyde
-//skinneklaring
-//tekst navn serie klasse nummer
+$fn=12;
+
 //Plugger med loddehull og tekstanvisning
 
 // med DIY USB 1.0  A til B kabel. 
-for(i=[0:1:0]){
-    translate([0,0,avstand*i])
-    intersection(){
-        
+bok();
+//lok();
+module bok() {
+    intersection(){       
 difference(){
     ytre();
     union(){
 indre();
-    for(me=[0:20:150]){
+    for(me=[0:135:135]){
 rotate([-me,0,0])
-    translate([-30,0,0])arm0();    
+    translate([-30,0,0])arm(0,0.2);    
 rotate([-me,0,0])
-    translate([30,0,0])arm1();   
+    translate([30,0,0])arm(1,0.2);   
+}
+tekst("A",1);
 }
 }
-}
-//lokk();
 boks();
 }
 }
+module lok() {
+    intersection(){       
+difference(){
+    ytre();
+    union(){
+indre();
+   translate([0,-19,15.5])rotate([45,0,0])cube([70,10,10],center=true); 
+tekst("A",1);
+}
+}
+lokk();
+}
+    translate([-30,0,0])arm(0,0.1);    
+    translate([30,0,0])arm(1,0.1); 
 
-module aksel0(){
-    rotate([0,90,0])cylinder(2.5,3,4,center=true);
 }
-module aksel1(){
-    rotate([0,90,0])cylinder(2.5,4,3,center=true);
+
+module tekst(k,ele){
+    color("pink")translate([29,39,-3])rotate([-90,180,0])linear_extrude(3)text(str("1EL",k," ELEV ",ele),6.5);
+    color("pink")translate([12,-30,-8])rotate([180,00,90])linear_extrude(3)text("Arduino Uno",7);
+    color("pink")translate([2,-30,-8])rotate([180,00,90])linear_extrude(3)text("+ Universal",7);
+    color("pink")translate([-8,-30,-8])rotate([180,00,90])linear_extrude(3)text("Serial Bus 1.0",7);
+    color("pink")translate([-18,-30,-8])rotate([180,00,90])linear_extrude(3)text("A til B kabel",7);
+    color("pink")translate([0,-42.5,1])rotate([-90,00,0])linear_extrude(height=3) oshw_logo_2d(15);
+    color("pink")translate([18,-8,12.5])rotate([0,00,180])linear_extrude(30)text("Se utfordringen",4);
+    color("pink")translate([18,2,12.5])rotate([0,00,180])linear_extrude(30)text("Krets med IO",4);
+    color("pink")translate([18,12,12.5])rotate([0,00,180])linear_extrude(30)text("Skisser løsning",4);
+    color("pink")translate([18,24,12.5])rotate([0,00,180])linear_extrude(30)text("Koding med",4);
+    color("pink")translate([18,31,12.5])rotate([0,00,180])linear_extrude(30)text("Seriell prating",4);
 }
+module aksel(f){
+   rotate([0,90,0])cylinder(2.7,3+f,4-f,center=true);
+}
+
 module boks(){
     translate([0,-snitt,0])rotate([vinkel,0,0])translate([0,0,-100])cube( [200,200,200],center=true);
 }
 module lokk(){
-    translate([0,-snitt,0])rotate([vinkel,0,0])translate([0,0,100])cube( [200,200,200],center=true);
+    translate([0,-snitt-0.7,0])rotate([vinkel,0,0])translate([0,0,100])cube( [200,200,200],center=true);
 }
 module indre(){
- minkowski(){
+ //minkowski(){
     union(){
-translate([-27,-32,-6])arduino();
-cube([50,68,10],center=true);
+translate([-26.7,-31,-6])arduino();
+        translate([-26.7,-33,-6])arduino();
+        translate([-26.7,-31,-5])arduino();
+        translate([-26.7,-33,-5])arduino();
+cube([50,70,12],center=true);
+        translate([24,0,-6])cube([2,70,3],center=true);
+        translate([-24,0,-6])cube([2,70,3],center=true);
+        translate([0,3.5,6])cube([42,66,9],center=true);
+        translate([0,0,-2])cube([42,69,10],center=true);
     }
-    rotate([45,45,0])cube(1.1,center=true);
-}   
+    rotate([45,45,0])cube(1.3,center=true);
+//}   
 }
-module arm0(){
+module arm(d,mar){
     difference(){
         minkowski(){
         union(){
-  rotate([0,90,0])cylinder(1.8,hoyde/2,hoyde/2,center=true);  
-    translate([0,-15,0])cube( [1.8,30,8],center=true);
+      rotate([0,90,0])cylinder(1.85+mar,hoyde/2+1,hoyde/2+1,center=true);  
+  translate([0,-19,0])cube( [1.85+mar,38,hoyde+2],center=true);
         }
         rotate([45,45,0])cube(0.5,center=true);
 }   
-        aksel0();
+        aksel(d);
 }
 }
-module arm1(){
-    difference(){
-        minkowski(){
-        union(){
-  rotate([0,90,0])cylinder(1.8,hoyde/2,hoyde/2,center=true);  
-    translate([0,-15,0])cube( [1.8,30,8],center=true);
-        }
-        rotate([45,45,0])cube(0.5,center=true);
-}   
-        aksel1();
-}
-}
+
 module ytre(){
     for (j=[-1:2:1]){
     minkowski(){
         union(){
-    cube([60,76,hoyde],center=true);
-    translate([27*j,-1,-hoyde/2-2])cube([2,70,4],center=true);
-    translate([25.7*j,-1,-hoyde/2-4])cube([3,70,0.9],center=true);
-    translate([21*j,1,hoyde/2+2])cube([2,70,4],center=true);
-    translate([22.3*j,1,hoyde/2+4])cube([3,70,0.9],center=true);
-           translate([24*j,36,hoyde/2+2])cube([3,2,3],center=true);
+    cube([60,78,hoyde],center=true);
+    translate([27*j,1.5,-hoyde/2-2])cube([2,75,4],center=true);
+    translate([25.7*j,1.5,-hoyde/2-4])cube([3,75,0.9],center=true);
+    translate([0,3.5,hoyde/2+2])cube([43,71,4],center=true);
+    translate([21.6*j,3.5,hoyde/2+4.1])cube([3,70,0.9],center=true);
+           translate([24*j,38,hoyde/2+2])cube([3,2,3],center=true);
             translate([24*j,-35,-hoyde/2-2])cube([3,2,3],center=true);
     }
     rotate([45,45,0])cube(1,center=true);
@@ -99,32 +114,7 @@ module ytre(){
 }
 }
 
-// Arduino connectors library
-//
-// Copyright (c) 2013 Kelly Egan
-//
-// The MIT License (MIT)
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
-// and associated documentation files (the "Software"), to deal in the Software without restriction, 
-// including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do 
-// so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all copies or substantial
-// portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT 
-// NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-// WHETHER IN A]N ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
 
-//use <pin_connectors/pins.scad>
-
-//Constructs a roughed out arduino board
-//Current only USB, power and headers
 module arduino(boardType = UNO) {
   //The PCB with holes
   difference() {
@@ -841,3 +831,26 @@ module pin_solid(h=10, r=4, lh=3, lt=1) {
     // translate([0, 0, h-lh-lt/2]) cylinder(h=lt/2, r1=r, r2=r+(lt/2), $fn=30);
   }
 }
+module gear_tooth_2d(d) 
+{   polygon([[0.0,10.0*d/72.0], [0.5*d,d/15.0], 
+             [0.5*d,-d/15.0], [0.0,-10.0*d/72.0]] );
+}
+
+module oshw_logo_2d(d=10.0)
+{   rotate(-135)
+    {   difference() 
+        {   union() 
+            {   circle(r=14.0*d/36.0,$fn=20);
+                for( a= [45: 45: 8*45] ) rotate(a) gear_tooth_2d(d);
+            }
+            circle(r=10.0*d/72.0,$fn=20);
+            intersection() 
+            {   rotate(-20) square(size=[10.0*d/18.0,10.0*d/18.0]);
+                rotate(20)  square(size=[10.0*d/18.0,10.0*d/18.0]);
+            }
+        }
+    }
+}
+
+// usage : oshw_logo_2d(diameter)
+
