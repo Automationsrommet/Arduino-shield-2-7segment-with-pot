@@ -1,8 +1,9 @@
-
+nummer=15;
+klasse="A";
 avstand=26;
 hoyde=16;
 vinkel=45;
-snitt=27;
+snitt=26.7;
 $fn=12;
 
 //Plugger med loddehull og tekstanvisning
@@ -22,11 +23,14 @@ rotate([-me,0,0])
 rotate([-me,0,0])
     translate([30,0,0])arm(1,0.2);   
 }
-tekst("A",1);
+tekst(klasse,nummer);
 }
 }
 boks();
+
 }
+translate([-29.8,0,0])translate([0,-2,0])aksel(0);
+translate([29.8,0,0])translate([0,-2,0])aksel(1);
 }
 module lok() {
     intersection(){       
@@ -47,10 +51,10 @@ lokk();
 
 module tekst(k,ele){
     color("pink")translate([29,39,-3])rotate([-90,180,0])linear_extrude(3)text(str("1EL",k," ELEV ",ele),6.5);
-    color("pink")translate([12,-30,-8])rotate([180,00,90])linear_extrude(3)text("Arduino Uno",7);
-    color("pink")translate([2,-30,-8])rotate([180,00,90])linear_extrude(3)text("+ Universal",7);
-    color("pink")translate([-8,-30,-8])rotate([180,00,90])linear_extrude(3)text("Serial Bus 1.0",7);
-    color("pink")translate([-18,-30,-8])rotate([180,00,90])linear_extrude(3)text("A til B kabel",7);
+    color("pink")translate([12,-30,-8.6])rotate([180,00,90])linear_extrude(3)text("Arduino Uno",7);
+    color("pink")translate([2,-30,-8.6])rotate([180,00,90])linear_extrude(3)text("+ Universal",7);
+    color("pink")translate([-8,-30,-8.6])rotate([180,00,90])linear_extrude(3)text("Serial Bus 1.0",7);
+    color("pink")translate([-18,-30,-8.6])rotate([180,00,90])linear_extrude(3)text("A til B kabel",7);
     color("pink")translate([0,-42.5,1])rotate([-90,00,0])linear_extrude(height=3) oshw_logo_2d(15);
     color("pink")translate([18,-8,12.5])rotate([0,00,180])linear_extrude(30)text("Se utfordringen",4);
     color("pink")translate([18,2,12.5])rotate([0,00,180])linear_extrude(30)text("Krets med IO",4);
@@ -59,7 +63,7 @@ module tekst(k,ele){
     color("pink")translate([18,31,12.5])rotate([0,00,180])linear_extrude(30)text("Seriell prating",4);
 }
 module aksel(f){
-   rotate([0,90,0])cylinder(2.7,3+f,4-f,center=true);
+   rotate([0,90,0])cylinder(3.1,3+f-0.5,4-f-0.5,center=true);
 }
 
 module boks(){
@@ -71,15 +75,14 @@ module lokk(){
 module indre(){
  //minkowski(){
     union(){
-translate([-26.7,-31,-6])arduino();
+
         translate([-26.7,-33,-6])arduino();
-        translate([-26.7,-31,-5])arduino();
-        translate([-26.7,-33,-5])arduino();
-cube([50,70,12],center=true);
+        
+cube([52,70,12],center=true);
         translate([24,0,-6])cube([2,70,3],center=true);
         translate([-24,0,-6])cube([2,70,3],center=true);
-        translate([0,3.5,6])cube([42,66,9],center=true);
-        translate([0,0,-2])cube([42,69,10],center=true);
+        translate([0,3.5,6])cube([42,68,9],center=true);
+        translate([0,0,-2.5])cube([46,75,10],center=true);
     }
     rotate([45,45,0])cube(1.3,center=true);
 //}   
@@ -89,12 +92,13 @@ module arm(d,mar){
         minkowski(){
         union(){
       rotate([0,90,0])cylinder(1.85+mar,hoyde/2+1,hoyde/2+1,center=true);  
-  translate([0,-19,0])cube( [1.85+mar,38,hoyde+2],center=true);
+  translate([0,-20,0])cube( [1.85+mar,40,hoyde+2],center=true);
         }
         rotate([45,45,0])cube(0.5,center=true);
 }   
-        aksel(d);
+        
 }
+
 }
 
 module ytre(){
@@ -102,12 +106,12 @@ module ytre(){
     minkowski(){
         union(){
     cube([60,78,hoyde],center=true);
-    translate([27*j,1.5,-hoyde/2-2])cube([2,75,4],center=true);
-    translate([25.7*j,1.5,-hoyde/2-4])cube([3,75,0.9],center=true);
+    translate([27*j,-0.5,-hoyde/2-2])cube([2,75,4],center=true);
+    translate([25.7*j,-0.5,-hoyde/2-4])cube([3,75,0.9],center=true);
     translate([0,3.5,hoyde/2+2])cube([43,71,4],center=true);
     translate([21.6*j,3.5,hoyde/2+4.1])cube([3,70,0.9],center=true);
            translate([24*j,38,hoyde/2+2])cube([3,2,3],center=true);
-            translate([24*j,-35,-hoyde/2-2])cube([3,2,3],center=true);
+            translate([24*j,-37.5,-hoyde/2-2])cube([3,1,3],center=true);
     }
     rotate([45,45,0])cube(1,center=true);
 }
@@ -130,7 +134,7 @@ module arduino(boardType = UNO) {
 //Creates a bumper style enclosure that fits tightly around the edge of the PCB.
 module bumper( boardType = UNO, mountingHoles = false ) {
   bumperBaseHeight = 2;
-  bumperHeight = bumperBaseHeight + pcbHeight + 0.5;
+  bumperHeight = bumperBaseHeight + pcbHeight + 3.5;
   dimensions = boardDimensions(boardType);
 
   difference() {
@@ -151,7 +155,7 @@ module bumper( boardType = UNO, mountingHoles = false ) {
 
       //Board mounting holes
       holePlacement(boardType=boardType)
-        cylinder(r = mountingHoleRadius + 1.5, h = bumperBaseHeight, $fn = 32);
+        cylinder(r = mountingHoleRadius + 1.5, h = bumperBaseHeight, $fn = 3);
 
       //Bumper mounting holes (exterior)
       if( mountingHoles ) {
@@ -189,7 +193,7 @@ module bumper( boardType = UNO, mountingHoles = false ) {
 }
 
 //Setting for enclosure mounting holes (Not Arduino mounting)
-NOMOUNTINGHOLES = 0;
+NOMOUNTINGHOLES = 1;
 INTERIORMOUNTINGHOLES = 1;
 EXTERIORMOUNTINGHOLES = 2;
 
@@ -505,14 +509,14 @@ TRE = 10;
 ETHERNET = 11;
 
 /********************************** MEASUREMENTS **********************************/
-pcbHeight = 1.7;
+pcbHeight = 5.7;
 headerWidth = 2.54;
-headerHeight = 9;
+headerHeight = 5;
 mountingHoleRadius = 3.2 / 2;
 
-ngWidth = 53.34;
+ngWidth = 55.34;
 leonardoDepth = 68.58 + 1.1;           //PCB depth plus offset of USB jack (1.1)
-ngDepth = 68.58 + 6.5;
+ngDepth = 9.78 + 6.5;
 megaDepth = 101.6 + 6.5;               //Coding is my business and business is good!
 dueDepth = 101.6 + 1.1;
 
