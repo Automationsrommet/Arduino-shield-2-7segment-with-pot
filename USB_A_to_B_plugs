@@ -1,0 +1,70 @@
+//Arduinokabel
+
+//indre 3.5*5.7
+//ytre 8.1 bred,7.3 høy, 6mm til skrå som er 45 grader
+ 
+ //usbb();
+ usba();
+ 
+ module usba(){
+     difference(){
+         union(){
+  color("orange")linear_extrude(9.4)
+difference(){
+square([12.1-0.2,4.5-0.2],center=true);
+translate([0,0.9])square([11.3+0.2,2.2+0.2],center=true);
+}
+color("red")translate([0,0,-6])linear_extrude(6)
+ square([12.1-0.2,4.5-0.2],center=true);
+color("green")translate([0,0,-13])
+minkowski(){
+    linear_extrude(6)
+square([12.1-0.2,4.5-0.2],center=true);
+sphere(1.5);
+} 
+color("yellow")translate([1,0,-18])cylinder(8,2,4,center=true,$fn=6);
+color("yellow")translate([-1,0,-18])cylinder(8,2,4,center=true,$fn=6);
+}
+translate([3.5,1.9,-4.5])sphere(2.7);
+translate([-3.5,-2.7,-4.5])sphere(2.7);
+translate([-1,1.9,-5.5])sphere(2.7);
+translate([1,-2.7,-5.5])sphere(2.7);
+color("yellow")translate([0,0,-14])cylinder(18,2.5,3.5,center=true,$fn=6);
+ 
+ color("white")translate([3.5,-0.8+0.2,1])cube([1,1,12],center=true);
+color("white")translate([-3.5,-0.8+0.2,1])cube([1,1,12],center=true);
+color("white")translate([-1,-0.8+0.2,0])cube([1,1,12],center=true);
+color("white")translate([1,-0.8+0.2,0])cube([1,1,12],center=true);
+ }
+ }
+module usbb(){difference(){
+union(){
+color("orange")linear_extrude(8)
+difference(){
+polygon([[0,-7.3/2+0.2],[-8.1/2+0.2,-7.3/2+0.2],[-8.1/2+0.2,-7.3/2+6],[-8.1/2+1.3,7.3/2-0.2],[8.1/2-1.3,7.3/2-0.2],[8.1/2-0.2,-7.3/2+6],[8.1/2-0.2,-7.3/2+0.2]]);
+square([5.7+0.2,3.5+0.2],center=true);
+}
+color("red")translate([0,0,-6])linear_extrude(6)
+polygon([[0,-7.3/2+0.2],[-8.1/2+0.2,-7.3/2+0.2],[-8.1/2+0.2,-7.3/2+6],[-8.1/2+1.3,7.3/2-0.2],[8.1/2-1.3,7.3/2-0.2],[8.1/2-0.2,-7.3/2+6],[8.1/2-0.2,-7.3/2+0.2]]);
+
+color("green")translate([0,0,-13])
+minkowski(){
+    linear_extrude(6)
+polygon([[0,-7.3/2],[-8.1/2,-7.3/2],[-8.1/2,-7.3/2+6],[-8.1/2+1.3,7.3/2],[8.1/2-1.3,7.3/2],[8.1/2,-7.3/2+6],[8.1/2,-7.3/2]]);
+sphere(1.5);
+}
+color("yellow")translate([0,0,-18])cylinder(8,2,5,center=true,$fn=6);
+}
+translate([2.2,4,-5.5])sphere(2.7);
+translate([2.2,-4,-5.5])sphere(2.7);
+translate([-2.2,4,-4.5])sphere(2.7);
+translate([-2.2,-4,-4.5])sphere(2.7);
+color("yellow")translate([0,0,-14])cylinder(18,2.5,3.5,center=true,$fn=6);
+
+
+color("white")translate([-1.3,3.5/2+0.2,1])cube([1,1,12],center=true);
+color("white")translate([-1.3,-3.5/2-0.2,1])cube([1,1,12],center=true);
+color("white")translate([1.3,3.5/2+0.2,0])cube([1,1,12],center=true);
+color("white")translate([1.3,-3.5/2-0.2,0])cube([1,1,12],center=true);
+}
+}
